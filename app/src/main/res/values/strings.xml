@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ExoPlayerDemo</string>
+    <string name="copy_video_dialog_message">Please copy video folder from project and paste it in your phone\'s \'Download\' folder and try restarting the app.</string>
+    <string name="not_found_title">Video file not found!</string>
 </resources>
