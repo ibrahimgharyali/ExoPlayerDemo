@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
             public void onPlayerError(ExoPlaybackException error) {
                 Log.v(TAG, "Listener-onPlayerError...");
                 player.stop();
+                // this is just a workaround. Ideally it should have the feature to show a list of videos from the device.
+                //can be easily done by fetching video files from device.
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
