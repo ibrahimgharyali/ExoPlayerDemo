@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
 //Set media controller
         simpleExoPlayerView.setUseController(true);
+        simpleExoPlayerView.setShowMultiWindowTimeBar(true);
         simpleExoPlayerView.requestFocus();
 
 // Bind the player to the view.
@@ -124,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         String urimp4 = "/Download/video/s_4.mp4"; //upload file to device and add path/name.mp4
 //        Uri mp4VideoUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
 
-        Uri videoUri1 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp1);
+        /*Uri videoUri1 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp1);
         Uri videoUri2 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp2);
         Uri videoUri3 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp3);
-        Uri videoUri4 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
+        Uri videoUri4 = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);*/
 
 
 
@@ -141,23 +142,39 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
 // II. ADJUST HERE:
 
+        String[] uris = new String[]{
+                "/Download/video/s_1.mp4",
+                "/Download/video/s_2.3gp",
+                "/Download/video/s_3.mp4",
+                "/Download/video/s_4.mp4"
+        };
+        Uri[] videoUris = new Uri[uris.length];
+        MediaSource[] videoSources = new MediaSource[uris.length];
+        for (int i = 0; i < uris.length; i ++ ) {
+            String vurl =uris[i];
+            videoUris[i] = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath() + vurl);
+            videoSources[i] = new ExtractorMediaSource(videoUris[i], dataSourceFactory, extractorsFactory, null, null);
+        }
 //This is the MediaSource representing the media to be played:
 //FOR SD CARD SOURCE:
-        MediaSource videoSource1 = new ExtractorMediaSource(videoUri1, dataSourceFactory, extractorsFactory, null, null);
+        /*MediaSource videoSource1 = new ExtractorMediaSource(videoUri1, dataSourceFactory, extractorsFactory, null, null);
         MediaSource videoSource2 = new ExtractorMediaSource(videoUri2, dataSourceFactory, extractorsFactory, null, null);
         MediaSource videoSource3 = new ExtractorMediaSource(videoUri3, dataSourceFactory, extractorsFactory, null, null);
-        MediaSource videoSource4 = new ExtractorMediaSource(videoUri4, dataSourceFactory, extractorsFactory, null, null);
+        MediaSource videoSource4 = new ExtractorMediaSource(videoUri4, dataSourceFactory, extractorsFactory, null, null);*/
 
 
 //FOR LIVESTREAM LINK:
 //        MediaSource videoSource = new HlsMediaSource(videoUri3, dataSourceFactory, 1, null, null);
 //        MediaSource videoSource2 = new HlsMediaSource(videoUri4, dataSourceFactory, 1, null, null);
 //        MergingMediaSource mergingMediaSource = new MergingMediaSource(videoSource);
-        final ConcatenatingMediaSource mediaSource = new ConcatenatingMediaSource(videoSource1, videoSource2, videoSource3, videoSource4);
+        final ConcatenatingMediaSource mediaSource = new ConcatenatingMediaSource(true,videoSources);
+
+
 //        final LoopingMediaSource loopingSource = new LoopingMediaSource(mediaSource);
 
 // Prepare the player with the source.
         player.prepare(mediaSource);
+//        player.prepare(videoSource1);
 
         player.addListener(new Player.EventListener() {
             @Override
@@ -235,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
         Log.v(TAG, "onVideoSizeChanged ["  + " width: " + width + " height: " + height + "]");
-        resolutionTextView.setText("RES:(WxH):"+width+"X"+height +"\n           "+height+"p");
+        resolutionTextView.setText("RES:(WxH):" + width + "X" + height + "   " + height + "p");
     }
 
     @Override
